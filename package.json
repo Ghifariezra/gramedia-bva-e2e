@@ -1,0 +1,36 @@
+{
+  "name": "gramedia-bva-e2e",
+  "version": "1.0.0",
+  "description": "Standard BVA black-box E2E tests for Gramedia.com (Selenium WebDriver + Mocha)",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha",
+    "test:auth": "mocha tests/specs/auth.bva.spec.js",
+    "test:cart": "mocha tests/specs/cart.bva.spec.js",
+    "test:catalog": "mocha tests/specs/catalog.bva.spec.js",
+    "test:cs": "mocha tests/specs/customer-service.bva.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ghifariezra/gramedia-bva-e2e.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Ghifariezra/gramedia-bva-e2e/issues"
+  },
+  "homepage": "https://github.com/Ghifariezra/gramedia-bva-e2e#readme",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^6.3.0",
+    "dotenv": "^18.0.8",
+    "mocha": "^12.0.3",
+    "selenium-webdriver": "^4.51.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

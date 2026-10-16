@@ -8,7 +8,7 @@
 ![Testing](https://img.shields.io/badge/testing-black--box%20E2E-blue)
 ![Selenium](https://img.shields.io/badge/Selenium-WebDriver-43B02A?logo=selenium&logoColor=white)
 ![Mocha](https://img.shields.io/badge/Mocha-Chai-8D6748?logo=mocha&logoColor=white)
-![Node](https://img.shields.io/badge/Node.js-20%2B-339933?logo=nodedotjs&logoColor=white)
+![Node](https://img.shields.io/badge/Node.js-22%2B-339933?logo=nodedotjs&logoColor=white)
 
 _Bugs hide at the edges, not in the middle. So we test the edges._
 
@@ -198,7 +198,7 @@ Flow: `spec` reads `data` → calls `page` → page uses `locators` and `utiliti
 
 **Prerequisites**
 
-- Node.js 20+
+- Node.js 22+
 - Latest Google Chrome
 - A dedicated test account (never a personal account)
 
