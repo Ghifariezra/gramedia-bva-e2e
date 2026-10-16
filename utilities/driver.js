@@ -6,57 +6,48 @@ import config from "./config.js";
 let activeDriver = null;
 
 function assertPathsExist() {
-  const entries = [
-    ["CHROME_BIN", config.chromeBin],
-    ["CHROMEDRIVER_PATH", config.chromedriverPath],
-  ];
-  for (const [name, file] of entries) {
-    if (file && !fs.existsSync(file)) {
-      throw new Error(`${name} menunjuk ke file yang tidak ada: ${file}`);
+    const entries = [
+        ["CHROME_BIN", config.chromeBin],
+        ["CHROMEDRIVER_PATH", config.chromedriverPath],
+    ];
+    for (const [name, file] of entries) {
+        if (file && !fs.existsSync(file)) {
+            throw new Error(`${name} menunjuk ke file yang tidak ada: ${file}`);
+        }
     }
-  }
 }
 
 export async function createDriver() {
-  if (config.browser !== "chrome") {
-    throw new Error(
-      `Unsupported BROWSER "${config.browser}". Only "chrome" is supported for now.`,
-    );
-  }
-  assertPathsExist();
+    if (config.browser !== "chrome") {
+        throw new Error(`Unsupported BROWSER "${config.browser}". Only "chrome" is supported for now.`);
+    }
+    assertPathsExist();
 
-  const options = new chrome.Options();
-  options.setPageLoadStrategy("eager");
-  if (config.chromeBin) options.setChromeBinaryPath(config.chromeBin);
-  if (config.noSandbox) options.addArguments("--no-sandbox");
-  options.addArguments(
-    "--incognito",
-    "--window-size=1920,1080",
-    "--lang=id-ID",
-    "--disable-dev-shm-usage",
-  );
-  if (config.headless) options.addArguments("--headless=new");
+    const options = new chrome.Options();
+    options.setPageLoadStrategy("eager");
+    if (config.chromeBin) options.setChromeBinaryPath(config.chromeBin);
+    if (config.noSandbox) options.addArguments("--no-sandbox");
+    options.addArguments("--incognito", "--window-size=1920,1080", "--lang=id-ID", "--disable-dev-shm-usage");
+    if (config.headless) options.addArguments("--headless=new");
 
-  const builder = new Builder().forBrowser("chrome").setChromeOptions(options);
-  if (config.chromedriverPath) {
-    builder.setChromeService(
-      new chrome.ServiceBuilder(config.chromedriverPath),
-    );
-  }
-  const driver = await builder.build();
+    const builder = new Builder().forBrowser("chrome").setChromeOptions(options);
+    if (config.chromedriverPath) {
+        builder.setChromeService(new chrome.ServiceBuilder(config.chromedriverPath));
+    }
+    const driver = await builder.build();
 
-  await driver.manage().setTimeouts({ pageLoad: config.timeouts.pageLoad });
-  activeDriver = driver;
-  return driver;
+    await driver.manage().setTimeouts({ pageLoad: config.timeouts.pageLoad });
+    activeDriver = driver;
+    return driver;
 }
 
 export async function quitDriver() {
-  if (!activeDriver) return;
-  const driver = activeDriver;
-  activeDriver = null;
-  await driver.quit();
+    if (!activeDriver) return;
+    const driver = activeDriver;
+    activeDriver = null;
+    await driver.quit();
 }
 
 export function getActiveDriver() {
-  return activeDriver;
+    return activeDriver;
 }

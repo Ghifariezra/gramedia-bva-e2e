@@ -1,12 +1,22 @@
 import BasePage from "./BasePage.js";
-import locators from "../locators/home.locators.js";
 
 export default class HomePage extends BasePage {
-  async open() {
-    await super.open("/");
-  }
+    #locators;
 
-  async isLoaded() {
-    return this.isVisible(locators.body, 10000);
-  }
+    constructor(driver, locators) {
+        super(driver);
+        this.#locators = locators;
+    }
+
+    async open() {
+        await super.open("/");
+    }
+
+    async isLoaded() {
+        return this.isVisible(this.#locators.body, 10000);
+    }
+
+    async clickRegister() {
+        await this.click(this.#locators.register);
+    }
 }
