@@ -1,5 +1,5 @@
 {
-  "spec": "tests/specs/**/*.spec.js",
+  "require": ["utilities/hooks.js"],
   "timeout": 60000,
   "reporter": "spec"
 }
