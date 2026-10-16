@@ -1,33 +1,31 @@
 {
     "name": "gramedia-bva-e2e",
     "version": "1.0.0",
+    "private": true,
     "description": "Standard BVA black-box E2E tests for Gramedia.com (Selenium WebDriver + Mocha)",
-    "main": "index.js",
-    "directories": {
-        "test": "tests"
-    },
-    "scripts": {
-        "test": "mocha \"tests/specs/**/*.spec.js\"",
-        "test:smoke": "mocha tests/specs/smoke.spec.js",
-        "lint": "biome lint .",
-        "format": "biome format --write .",
-        "check": "biome check .",
-        "check:fix": "biome check --write ."
-    },
+    "author": "Ghifari Ezra Ramadhan",
+    "license": "MIT",
+    "type": "module",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Ghifariezra/gramedia-bva-e2e.git"
     },
-    "keywords": [],
-    "type": "module",
     "bugs": {
         "url": "https://github.com/Ghifariezra/gramedia-bva-e2e/issues"
     },
     "homepage": "https://github.com/Ghifariezra/gramedia-bva-e2e#readme",
-    "license": "MIT",
+    "scripts": {
+        "test": "mocha \"tests/specs/**/*.spec.js\"",
+        "test:smoke": "mocha tests/specs/smoke.spec.js",
+        "test:headless": "cross-env HEADLESS=true npm test",
+        "check": "biome check .",
+        "check:fix": "biome check --write .",
+        "verify": "biome ci . && npm test"
+    },
     "devDependencies": {
         "@biomejs/biome": "2.5.15",
         "chai": "^6.3.0",
+        "cross-env": "^10.1.0",
         "dotenv": "^18.0.8",
         "mocha": "^12.0.3",
         "selenium-webdriver": "^4.51.0"
