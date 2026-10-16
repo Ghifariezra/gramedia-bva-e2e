@@ -7,18 +7,15 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha",
-    "test:auth": "mocha tests/specs/auth.bva.spec.js",
-    "test:cart": "mocha tests/specs/cart.bva.spec.js",
-    "test:catalog": "mocha tests/specs/catalog.bva.spec.js",
-    "test:cs": "mocha tests/specs/customer-service.bva.spec.js"
+    "test": "mocha \"tests/specs/**/*.spec.js\"",
+    "test:smoke": "mocha tests/specs/smoke.spec.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Ghifariezra/gramedia-bva-e2e.git"
   },
   "keywords": [],
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/Ghifariezra/gramedia-bva-e2e/issues"
   },
