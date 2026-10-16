@@ -28,6 +28,7 @@ _Bugs hide at the edges, not in the middle. So we test the edges._
 - [Example Test Cases](#example-test-cases)
 - [How It Works](#how-it-works)
 - [Project Structure](#project-structure)
+- [Architecture Layers](#architecture-layers)
 - [Getting Started](#getting-started)
 - [Running the Tests](#running-the-tests)
 - [Testing Ethics & Rules](#testing-ethics--rules)
@@ -122,7 +123,7 @@ flowchart LR
     B --> C[Observe min / max on live site]
     C --> D[Derive 6 Standard BVA values]
     D --> E[Store in data/bva/*.json]
-    E --> F[Mocha + Selenium run each value]
+    E --> F[Specs run each value via Selenium]
     F --> G[Compare actual vs expected]
     G --> H[Report pass / fail]
 ```
@@ -166,18 +167,32 @@ Test data is separated from test logic. Example `data/bva/cart.json`:
 
 ```
 gramedia-bva-e2e/
-├── data/bva/                    # BVA test data per module (JSON)
-├── pages/                       # Page Object Model
+├── data/
+│   └── bva/                     # BVA test data per module (JSON)
 ├── tests/
-│   ├── auth.bva.test.js
-│   ├── cart.bva.test.js
-│   ├── catalog.bva.test.js
-│   └── customer-service.bva.test.js
-├── utils/driver.js              # WebDriver setup
+│   ├── locators/                # element selectors per page
+│   ├── pages/                   # Page Object Model
+│   └── specs/                   # Mocha specs (one per module)
+├── utilities/                   # WebDriver setup, wait helpers
 ├── .env.example
 ├── .mocharc.json
-└── package.json
+├── package.json
+└── README.md
 ```
+
+## Architecture Layers
+
+Each layer has one job, so a UI change only touches one place.
+
+| Layer     | Folder            | Responsibility                                                        |
+| --------- | ----------------- | --------------------------------------------------------------------- |
+| Data      | `data/bva/`       | Standard BVA values and expected results, no code                     |
+| Locators  | `tests/locators/` | Selectors only (CSS/XPath). When Gramedia changes its UI, fix it here |
+| Pages     | `tests/pages/`    | User actions built on locators (type, click, read message)            |
+| Specs     | `tests/specs/`    | Loop over BVA data, call page actions, assert with Chai               |
+| Utilities | `utilities/`      | Driver setup, explicit-wait helpers, delay, screenshot on failure     |
+
+Flow: `spec` reads `data` → calls `page` → page uses `locators` and `utilities` → Selenium drives the browser.
 
 ## Getting Started
 
@@ -225,7 +240,8 @@ Tests run against the **production site**, so:
 2. No load/stress testing or intrusive penetration testing.
 3. Use a clean browser profile (no extensions or cache) and a dedicated test account.
 4. Keep a delay between actions (`ACTION_DELAY_MS`) to avoid anti-bot and rate limits.
-5. Document results with screenshots and screen recordings.
+5. Use explicit waits, never fixed `sleep`.
+6. Document results with screenshots and screen recordings.
 
 ## Limitations
 
