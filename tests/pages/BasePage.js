@@ -1,14 +1,23 @@
 import config from "../../utilities/config.js";
 import { pause, waitForClickable, waitForUrlContains, waitForVisible } from "../../utilities/wait.js";
+import { commonLocators } from "../locators/common.locators.js";
 
 export default class BasePage {
+    // Di-override oleh subclass.
+    path = "/";
+    locators = {};
+
     constructor(driver) {
         this.driver = driver;
     }
 
-    async open(urlPath = "/") {
-        await this.driver.get(`${config.baseUrl}${urlPath}`);
+    async open() {
+        await this.driver.get(`${config.baseUrl}${this.path}`);
         await pause(this.driver);
+    }
+
+    async isLoaded() {
+        return this.isVisible(commonLocators.body, 10000);
     }
 
     async find(locator) {

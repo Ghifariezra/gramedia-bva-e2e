@@ -1,0 +1,43 @@
+{
+    "variable": "search keyword length",
+    "min": 3,
+    "max": 50,
+    "cases": [
+        {
+            "id": "CAT-BVA-S01",
+            "length": 2,
+            "class": "invalid",
+            "expect": "rejected"
+        },
+        {
+            "id": "CAT-BVA-S02",
+            "length": 3,
+            "class": "valid",
+            "expect": "accepted"
+        },
+        {
+            "id": "CAT-BVA-S03",
+            "length": 4,
+            "class": "valid",
+            "expect": "accepted"
+        },
+        {
+            "id": "CAT-BVA-S04",
+            "length": 49,
+            "class": "valid",
+            "expect": "accepted"
+        },
+        {
+            "id": "CAT-BVA-S05",
+            "length": 50,
+            "class": "valid",
+            "expect": "accepted"
+        },
+        {
+            "id": "CAT-BVA-S06",
+            "length": 51,
+            "class": "invalid",
+            "expect": "truncated"
+        }
+    ]
+}
