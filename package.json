@@ -19,6 +19,8 @@
         "test:register": "mocha tests/specs/register.bva.spec.js",
         "test:catalog": "mocha tests/specs/catalog.bva.spec.js",
         "test:catalog:report": "mocha tests/specs/catalog.bva.spec.js --reporter mochawesome --reporter-options reportDir=reports,reportFilename=catalog-report,timestamp=true,inline=true",
+        "test:price": "mocha tests/specs/price.bva.spec.js",
+        "test:price:report": "mocha tests/specs/price.bva.spec.js --reporter mochawesome --reporter-options reportDir=reports,reportFilename=price-report,timestamp=true,inline=true",
         "test:headless": "cross-env HEADLESS=true npm test",
         "test:report": "mocha \"tests/specs/**/*.spec.js\" --reporter mochawesome --reporter-options reportDir=reports,reportFilename=bva-report,overwrite=false,timestamp=true,inline=true",
         "check": "biome check .",

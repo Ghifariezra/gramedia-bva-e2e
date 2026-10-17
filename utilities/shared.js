@@ -11,6 +11,8 @@ export function itOpensAndShowsTitle(ctx, titlePattern = /gramedia/i) {
 export function runCases(cases, run) {
     for (const c of cases) {
         const title = c.description ?? `${c.length} chars -> ${c.expect}`;
-        it(`${c.id}: ${title}`, () => run(c));
+        it(`${c.id}: ${title}`, function () {
+            return run.call(this, c);
+        });
     }
 }
