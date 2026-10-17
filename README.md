@@ -93,12 +93,12 @@ Modules 2, 3, 4, and 6 have no bounded inputs and are covered by non-BVA smoke t
 
 Values are filled in from direct observation of the live site, not guessed.
 
-| Variable                      | Min | Max         | Source            |
-| ----------------------------- | --- | ----------- | ----------------- |
-| Password length               | TBD | TBD         | Registration form |
-| Item quantity                 | 1   | TBD (stock) | Cart page         |
-| Price filter                  | 0   | TBD         | Catalog filter    |
-| "Hubungi Kami" message length | TBD | TBD         | Contact form      |
+| Variable                      | Min | Max                    | Source            |
+| ----------------------------- | --- | ---------------------- | ----------------- |
+| Password length               | TBD | TBD                    | Registration form |
+| Item quantity                 | 1   | TBD (stock)            | Cart page         |
+| Price filter                  | 1   | 10,000,000,000,000     | Catalog filter    |
+| "Hubungi Kami" message length | TBD | TBD                    | Contact form      |
 
 ## Example Test Cases
 
@@ -229,6 +229,7 @@ npm test                  # run everything
 npm run test:auth         # Account & Authentication
 npm run test:cart         # Cart & Checkout
 npm run test:catalog      # Product Catalog
+npm run test:price        # Price filter
 npm run test:cs           # Customer Service
 ```
 
