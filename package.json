@@ -16,7 +16,8 @@
     "homepage": "https://github.com/Ghifariezra/gramedia-bva-e2e#readme",
     "scripts": {
         "test": "mocha \"tests/specs/**/*.spec.js\"",
-        "test:smoke": "mocha tests/specs/smoke.spec.js",
+        "test:register": "mocha tests/specs/register.bva.spec.js",
+        "test:catalog": "mocha tests/specs/catalog.bva.spec.js",
         "test:headless": "cross-env HEADLESS=true npm test",
         "check": "biome check .",
         "check:fix": "biome check --write .",
