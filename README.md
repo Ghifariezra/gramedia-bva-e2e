@@ -21,11 +21,13 @@ _Bugs hide at the edges, not in the middle. So we test the edges._
 ## Table of Contents
 
 - [Overview](#overview)
+- [Test Plan](#test-plan)
+- [Test Scope](#test-scope)
+- [Modules Under Test (BVA curation pending)](#modules-under-test-bva-curation-pending)
 - [Why Boundary Value Analysis?](#why-boundary-value-analysis)
 - [Standard BVA at a Glance](#standard-bva-at-a-glance)
-- [Modules Under Test](#modules-under-test)
-- [Boundary Table](#boundary-table)
-- [Example Test Cases](#example-test-cases)
+- [Boundary Table (draft)](#boundary-table-draft)
+- [Example Test Cases (illustrative)](#example-test-cases-illustrative)
 - [How It Works](#how-it-works)
 - [Project Structure](#project-structure)
 - [Architecture Layers](#architecture-layers)
@@ -42,7 +44,90 @@ _Bugs hide at the edges, not in the middle. So we test the edges._
 
 This repository automates **black-box, end-to-end tests** for [Gramedia.com](https://www.gramedia.com/) using **Standard Boundary Value Analysis (Type A)**.
 
-Test targets are taken from the modules identified in our report _Desain Test Strategi, Planning, Test Case dan Skenario Pada Gramedia.com_ (Assignment 04, Group 13, Human Error). Only modules with **bounded inputs** are covered by BVA.
+It implements one part of the group's test strategy, defined in the report _Desain Test Strategi, Planning, Test Case dan Skenario Pada Gramedia.com_ (Assignment 04, Group 13, Human Error). The full Test Plan is in [`docs/TEST_PLAN.md`](docs/TEST_PLAN.md).
+
+## Test Plan
+
+Summary. Full details (strategy, resources, risks, environment) are in [`docs/TEST_PLAN.md`](docs/TEST_PLAN.md).
+
+| Item                | Detail                                                  |
+| ------------------- | ------------------------------------------------------- |
+| Object under test   | Gramedia.com (<https://www.gramedia.com/>), web version |
+| Test type           | Black-box, validation and system level                  |
+| Reference standards | ISO/IEC/IEEE 29119-2 and 29119-3, ISO/IEC 25010         |
+| Approach            | Risk-Based Testing; manual and automated                |
+| Period              | 12 October to 6 November 2026                           |
+| This repository     | Automated Standard BVA                                  |
+
+**Exit criteria**
+
+1. 100% of high-priority test cases executed.
+2. At least 90% of all test cases executed.
+3. No open Critical defect without documentation.
+4. Test report completed.
+
+**Milestones**
+
+| Milestone                   | Target      |
+| --------------------------- | ----------- |
+| M1: Test Plan done          | 16 Oct 2026 |
+| M2: all test cases reviewed | 23 Oct 2026 |
+| M3: execution done          | 3 Nov 2026  |
+| M4: final report submitted  | 6 Nov 2026  |
+
+**Test environment**
+
+| Component   | Specification                                                        |
+| ----------- | -------------------------------------------------------------------- |
+| Application | Gramedia.com, production                                             |
+| Client      | Laptop (Chrome, Firefox, Edge, Safari), Android/iOS smartphone       |
+| Resolution  | Desktop 1920x1080 and 1366x768, tablet 768px, mobile 375px           |
+| Test data   | Dedicated team test account, sample products from several categories |
+
+## Test Scope
+
+### In-scope
+
+| No  | Module                       | Test focus                                                                     |
+| --- | ---------------------------- | ------------------------------------------------------------------------------ |
+| 1   | Product Catalog & Categories | Category view, price, discount, filter, sorting, pagination                    |
+| 2   | Product Detail               | Information completeness, format options, breadcrumb, images                   |
+| 3   | Promo & Campaign             | Promo banners, discount price accuracy, promo page links                       |
+| 4   | Store Locator                | Branch location search and display                                             |
+| 6   | Content / Blog               | Article display and navigation                                                 |
+| 7   | Customer Service             | "Hubungi Kami" form, WhatsApp link                                             |
+| 10  | Account & Authentication     | Registration, login, logout, input validation, password reset                  |
+| 11  | Cart & Checkout              | Add, change, remove items, total calculation, flow up to payment stage         |
+| 12  | Payment & Shipping           | Payment method and courier options, shipping cost calculation (before payment) |
+| –   | Non-functional               | Responsiveness, browser compatibility, performance, basic security             |
+
+### Out-of-scope
+
+| Item                                                 | Reason                                                  |
+| ---------------------------------------------------- | ------------------------------------------------------- |
+| Real payment transactions                            | Incur real cost                                         |
+| Internal payment gateway and courier systems         | Managed by third parties                                |
+| Module 9: Mobile App Channel                         | Group focuses on the web version only                   |
+| Module 5: Affiliate & Partnership                    | Requires an official partnership process                |
+| Module 8: Social Media Integration                   | External platform content, only link opening is checked |
+| Large-scale load/stress and deep penetration testing | Risks disrupting the production site                    |
+| Server, database, source code                        | No access (black-box)                                   |
+
+## Modules Under Test (BVA curation pending)
+
+All in-scope modules are currently BVA **candidates**. Which of them have bounded inputs, and therefore get Standard BVA test cases, will be decided in a separate curation step.
+
+| No  | Module                       | BVA applicability |
+| --- | ---------------------------- | ----------------- |
+| 1   | Product Catalog & Categories | Pending curation  |
+| 2   | Product Detail               | Pending curation  |
+| 3   | Promo & Campaign             | Pending curation  |
+| 4   | Store Locator                | Pending curation  |
+| 6   | Content / Blog               | Pending curation  |
+| 7   | Customer Service             | Pending curation  |
+| 10  | Account & Authentication     | Pending curation  |
+| 11  | Cart & Checkout              | Pending curation  |
+| 12  | Payment & Shipping           | Pending curation  |
 
 ## Why Boundary Value Analysis?
 
@@ -78,20 +163,9 @@ For every bounded input with range `[min, max]`, each boundary gets **three crit
 
 > **Out of scope:** Robustness BVA (Type B), which feeds extreme values far beyond the requirement to test error-handling resilience.
 
-## Modules Under Test
+## Boundary Table (draft)
 
-| No  | Module                       | Bounded variables                           | ID prefix  |
-| --- | ---------------------------- | ------------------------------------------- | ---------- |
-| 10  | Account & Authentication     | Password length, name length, email length  | `AUTH-BVA` |
-| 11  | Cart & Checkout              | Item quantity (min 1, max = stock)          | `CART-BVA` |
-| 1   | Product Catalog & Categories | Price filter range, pagination page number  | `CAT-BVA`  |
-| 7   | Customer Service             | Message field length in "Hubungi Kami" form | `CS-BVA`   |
-
-Modules 2, 3, 4, and 6 have no bounded inputs and are covered by non-BVA smoke tests. Modules 5, 8, 9 and real payment transactions are **out of scope** (see Test Scope in the report).
-
-## Boundary Table
-
-Values are filled in from direct observation of the live site, not guessed.
+> Draft. Variables and values are finalized after module curation. Values are filled in from direct observation of the live site, not guessed.
 
 | Variable                      | Min | Max         | Source            |
 | ----------------------------- | --- | ----------- | ----------------- |
@@ -100,9 +174,9 @@ Values are filled in from direct observation of the live site, not guessed.
 | Price filter                  | 0   | TBD         | Catalog filter    |
 | "Hubungi Kami" message length | TBD | TBD         | Contact form      |
 
-## Example Test Cases
+## Example Test Cases (illustrative)
 
-Cart quantity with `min = 1` and `max = stock` (shown as `S`):
+Illustrative example only, not a curated module. Cart quantity with `min = 1` and `max = stock` (shown as `S`):
 
 | ID          | Input | Class           | Expected result                    |
 | ----------- | ----- | --------------- | ---------------------------------- |
@@ -128,7 +202,7 @@ flowchart LR
     G --> H[Report pass / fail]
 ```
 
-Test data is separated from test logic. Example `data/bva/cart.json`:
+Test data is separated from test logic. Example `data/bva/cart.json` (placeholder values):
 
 ```json
 {
@@ -169,6 +243,8 @@ Test data is separated from test logic. Example `data/bva/cart.json`:
 gramedia-bva-e2e/
 ├── data/
 │   └── bva/                     # BVA test data per module (JSON)
+├── docs/
+│   └── TEST_PLAN.md             # full Test Plan from the Tugas 04 report
 ├── tests/
 │   ├── locators/                # element selectors per page
 │   ├── pages/                   # Page Object Model
@@ -205,7 +281,7 @@ Flow: `spec` reads `data` → calls `page` → page uses `locators` and `utiliti
 **Install**
 
 ```bash
-git clone https://github.com/<username>/gramedia-bva-e2e.git
+git clone https://github.com/Ghifariezra/gramedia-bva-e2e.git
 cd gramedia-bva-e2e
 npm install
 cp .env.example .env
@@ -232,6 +308,8 @@ npm run test:catalog      # Product Catalog
 npm run test:cs           # Customer Service
 ```
 
+> Spec files appear as modules are curated and implemented. Scripts for modules without a spec yet will report no test files.
+
 ## Testing Ethics & Rules
 
 Tests run against the **production site**, so:
@@ -245,19 +323,23 @@ Tests run against the **production site**, so:
 
 ## Limitations
 
-- The site UI can change at any time, which may break selectors.
-- Captcha or anti-bot protection may block automation.
-- The payment flow cannot be tested end to end.
+Mapped to the risks in the Test Plan:
+
+- **R4:** the site UI can change during testing, which may break selectors
+- **R5:** captcha or rate limiting can block automation, so actions use delays
+- **R6:** the payment flow cannot be tested end to end
+- **R7:** the site may be slow or down during promotions, so runs may need repeating
+- **R8:** results may differ across browsers and devices
 
 ## Team
 
 **Group 13: Human Error**
 
-| Name                  | Student ID | Role              |
-| --------------------- | ---------- | ----------------- |
-| Rakha Hafidz Fauzan   | 4524210082 | Test Manager      |
-| Muhammad Hilmi        | 4524210066 | QA Engineer       |
-| Ghifari Ezra Ramadhan | 4524210041 | Automation Tester |
+| Name                  | Student ID | Role                                        |
+| --------------------- | ---------- | ------------------------------------------- |
+| Rakha Hafidz Fauzan   | 4524210082 | Test Manager                                |
+| Muhammad Hilmi        | 4524210066 | QA Engineer                                 |
+| Ghifari Ezra Ramadhan | 4524210041 | Automation Tester, Security Auditor (basic) |
 
 Supervising lecturer: Dra. Sri Rezeki Candra N, M.Kom.
 
