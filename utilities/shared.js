@@ -7,3 +7,10 @@ export function itOpensAndShowsTitle(ctx, titlePattern = /gramedia/i) {
         expect(await ctx.page.title()).to.match(titlePattern);
     });
 }
+
+export function runCases(cases, run) {
+    for (const c of cases) {
+        const title = c.description ?? `${c.length} chars -> ${c.expect}`;
+        it(`${c.id}: ${title}`, () => run(c));
+    }
+}

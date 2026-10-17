@@ -25,9 +25,20 @@ export async function createDriver() {
 
     const options = new chrome.Options();
     options.setPageLoadStrategy("eager");
+    options.excludeSwitches("enable-logging", "enable-automation");
     if (config.chromeBin) options.setChromeBinaryPath(config.chromeBin);
     if (config.noSandbox) options.addArguments("--no-sandbox");
-    options.addArguments("--incognito", "--window-size=1920,1080", "--lang=id-ID", "--disable-dev-shm-usage");
+    options.addArguments(
+        "--incognito",
+        "--window-size=1920,1080",
+        "--lang=id-ID",
+        "--disable-dev-shm-usage",
+        "--log-level=3",
+        "--disable-background-networking",
+        "--disable-component-update",
+        "--disable-default-apps",
+        "--disable-sync",
+    );
     if (config.headless) options.addArguments("--headless=new");
 
     const builder = new Builder().forBrowser("chrome").setChromeOptions(options);

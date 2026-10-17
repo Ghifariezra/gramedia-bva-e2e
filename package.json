@@ -18,7 +18,9 @@
         "test": "mocha \"tests/specs/**/*.spec.js\"",
         "test:register": "mocha tests/specs/register.bva.spec.js",
         "test:catalog": "mocha tests/specs/catalog.bva.spec.js",
+        "test:catalog:report": "mocha tests/specs/catalog.bva.spec.js --reporter mochawesome --reporter-options reportDir=reports,reportFilename=catalog-report,timestamp=true,inline=true",
         "test:headless": "cross-env HEADLESS=true npm test",
+        "test:report": "mocha \"tests/specs/**/*.spec.js\" --reporter mochawesome --reporter-options reportDir=reports,reportFilename=bva-report,overwrite=false,timestamp=true,inline=true",
         "check": "biome check .",
         "check:fix": "biome check --write .",
         "verify": "biome ci . && npm test"
@@ -29,6 +31,7 @@
         "cross-env": "^10.1.0",
         "dotenv": "^18.0.8",
         "mocha": "^12.0.3",
+        "mochawesome": "^8.1.1",
         "selenium-webdriver": "^4.51.0"
     },
     "engines": {

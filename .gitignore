@@ -4,3 +4,5 @@ screenshots/
 *.log
 .DS_Store
 commit-message.txt
+reports/
+screenshots/
