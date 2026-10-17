@@ -1,0 +1,49 @@
+{
+    "variable": "search keyword length",
+    "min": 3,
+    "max": 50,
+    "cases": [
+        {
+            "id": "CAT-BVA-S01",
+            "description": "Search with 2 characters (min-1) shows the minimum-length toast and does not navigate",
+            "length": 2,
+            "class": "invalid",
+            "expect": "rejected"
+        },
+        {
+            "id": "CAT-BVA-S02",
+            "description": "Search with 3 characters (min) opens the search results page",
+            "length": 3,
+            "class": "valid",
+            "expect": "accepted"
+        },
+        {
+            "id": "CAT-BVA-S03",
+            "description": "Search with 4 characters (min+1) opens the search results page",
+            "length": 4,
+            "class": "valid",
+            "expect": "accepted"
+        },
+        {
+            "id": "CAT-BVA-S04",
+            "description": "Search with 49 characters (max-1) opens the search results page",
+            "length": 49,
+            "class": "valid",
+            "expect": "accepted"
+        },
+        {
+            "id": "CAT-BVA-S05",
+            "description": "Search with 50 characters (max) opens the search results page",
+            "length": 50,
+            "class": "valid",
+            "expect": "accepted"
+        },
+        {
+            "id": "CAT-BVA-S06",
+            "description": "Typing 51 characters (max+1) is truncated to 50 characters in the input",
+            "length": 51,
+            "class": "invalid",
+            "expect": "truncated"
+        }
+    ]
+}

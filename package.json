@@ -1,36 +1,40 @@
 {
-  "name": "gramedia-bva-e2e",
-  "version": "1.0.0",
-  "description": "Standard BVA black-box E2E tests for Gramedia.com (Selenium WebDriver + Mocha)",
-  "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
-  "scripts": {
-    "test": "mocha",
-    "test:auth": "mocha tests/specs/auth.bva.spec.js",
-    "test:cart": "mocha tests/specs/cart.bva.spec.js",
-    "test:catalog": "mocha tests/specs/catalog.bva.spec.js",
-    "test:cs": "mocha tests/specs/customer-service.bva.spec.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Ghifariezra/gramedia-bva-e2e.git"
-  },
-  "keywords": [],
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Ghifariezra/gramedia-bva-e2e/issues"
-  },
-  "homepage": "https://github.com/Ghifariezra/gramedia-bva-e2e#readme",
-  "license": "MIT",
-  "devDependencies": {
-    "chai": "^6.3.0",
-    "dotenv": "^18.0.8",
-    "mocha": "^12.0.3",
-    "selenium-webdriver": "^4.51.0"
-  },
-  "engines": {
-    "node": ">=22.12.0"
-  }
+    "name": "gramedia-bva-e2e",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Standard BVA black-box E2E tests for Gramedia.com (Selenium WebDriver + Mocha)",
+    "author": "Ghifari Ezra Ramadhan",
+    "license": "MIT",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Ghifariezra/gramedia-bva-e2e.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Ghifariezra/gramedia-bva-e2e/issues"
+    },
+    "homepage": "https://github.com/Ghifariezra/gramedia-bva-e2e#readme",
+    "scripts": {
+        "test": "mocha \"tests/specs/**/*.spec.js\"",
+        "test:register": "mocha tests/specs/register.bva.spec.js",
+        "test:catalog": "mocha tests/specs/catalog.bva.spec.js",
+        "test:catalog:report": "mocha tests/specs/catalog.bva.spec.js --reporter mochawesome --reporter-options reportDir=reports,reportFilename=catalog-report,timestamp=true,inline=true",
+        "test:headless": "cross-env HEADLESS=true npm test",
+        "test:report": "mocha \"tests/specs/**/*.spec.js\" --reporter mochawesome --reporter-options reportDir=reports,reportFilename=bva-report,overwrite=false,timestamp=true,inline=true",
+        "check": "biome check .",
+        "check:fix": "biome check --write .",
+        "verify": "biome ci . && npm test"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "2.5.15",
+        "chai": "^6.3.0",
+        "cross-env": "^10.1.0",
+        "dotenv": "^18.0.8",
+        "mocha": "^12.0.3",
+        "mochawesome": "^8.1.1",
+        "selenium-webdriver": "^4.51.0"
+    },
+    "engines": {
+        "node": ">=22.12.0"
+    }
 }
