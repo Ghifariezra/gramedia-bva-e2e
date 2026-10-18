@@ -128,4 +128,44 @@ describe("Gramedia - Register Page", () => {
             expect((await page.passwordValue()).length).to.equal(c.length);
         });
     });
+
+    // Checkbox syarat adalah prasyarat fixture, bukan boundary, jadi memakai prefix AUTH-PRE.
+    // Kontrol positifnya ada di akhir: setelah dicentang, tombol harus enabled.
+    describe("Terms checkbox precondition (AUTH-PRE)", () => {
+        beforeEach(async () => {
+            await ctx.page.openRegisterForm();
+        });
+
+        it("AUTH-PRE-01: Daftar stays disabled while terms are unchecked and becomes enabled after checking", async () => {
+            const { page } = ctx;
+            await page.fillValidForm({ ...validForm(), acceptTerms: false });
+            expect(await page.isTermsChecked()).to.equal(false);
+            await page.waitForSubmitEnabled(false);
+            await page.checkTerms();
+            await page.waitForSubmitEnabled(true);
+        });
+    });
+
+    // Indikator aturan panjang minimal. State sukses diamati langsung di situs: data-testid "minCharSuccess".
+    // Pada 7 karakter indikator tidak boleh sukses, pada 8 karakter harus sukses.
+    // State 7 karakter dicatat ke report supaya nama state "belum terpenuhi" bisa dikunci setelah dilihat.
+    describe("Password min rule indicator (AUTH-RULE)", () => {
+        beforeEach(async () => {
+            await ctx.page.openRegisterForm();
+        });
+
+        it("AUTH-RULE-01: min length indicator is satisfied at 8 characters but not at 7", async function () {
+            const { page } = ctx;
+            await page.setPassword(makePassword(7));
+            const at7 = (await page.passwordRuleStates()).minLength;
+
+            await page.replaceValue(page.locators.passwordInput, makePassword(8));
+            await page.waitForMinRuleChange(at7);
+            const at8 = (await page.passwordRuleStates()).minLength;
+
+            addContext(this, { title: "Rule states", value: { at7, at8 } });
+            expect(at7.testId).to.not.equal("minCharSuccess");
+            expect(at8.testId).to.equal("minCharSuccess");
+        });
+    });
 });

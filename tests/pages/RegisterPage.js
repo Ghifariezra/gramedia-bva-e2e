@@ -84,12 +84,13 @@ export default class RegisterPage extends BasePage {
     }
 
     // Mengisi seluruh form dengan data valid. Konfirmasi password dibuat sama dengan password.
-    async fillValidForm({ email, fullName, password }) {
+    // acceptTerms=false membiarkan checkbox syarat kosong, untuk menguji prasyarat checkbox.
+    async fillValidForm({ email, fullName, password, acceptTerms = true }) {
         await this.setEmail(email);
         await this.setFullName(fullName);
         await this.setPassword(password);
         await this.setConfirmPassword(password);
-        await this.checkTerms();
+        if (acceptTerms) await this.checkTerms();
     }
 
     async emailValue() {
@@ -136,6 +137,18 @@ export default class RegisterPage extends BasePage {
             minLength: await read(this.locators.passwordMinRule),
             characterMix: await read(this.locators.passwordMixRule),
         };
+    }
+
+    // Menunggu indikator aturan panjang minimal berubah dari state sebelumnya.
+    async waitForMinRuleChange(previous, timeoutMs = 5000) {
+        return this.driver.wait(
+            async () => {
+                const { minLength } = await this.passwordRuleStates();
+                return minLength.testId !== previous.testId || minLength.className !== previous.className;
+            },
+            timeoutMs,
+            "Min length rule indicator did not change",
+        );
     }
 
     // Sengaja tidak ada method submit: tes berjalan di situs produksi dan tidak boleh membuat akun.
