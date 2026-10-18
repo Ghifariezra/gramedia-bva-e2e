@@ -17,6 +17,7 @@
     "scripts": {
         "test": "mocha \"tests/specs/**/*.spec.js\"",
         "test:register": "mocha tests/specs/register.bva.spec.js",
+        "test:register:report": "mocha tests/specs/register.bva.spec.js --reporter mochawesome --reporter-options reportDir=reports,reportFilename=register-report,timestamp=true,inline=true",
         "test:catalog": "mocha tests/specs/catalog.bva.spec.js",
         "test:catalog:report": "mocha tests/specs/catalog.bva.spec.js --reporter mochawesome --reporter-options reportDir=reports,reportFilename=catalog-report,timestamp=true,inline=true",
         "test:price": "mocha tests/specs/price.bva.spec.js",
