@@ -9,6 +9,34 @@ const { fixed, emailCases, emailMinCases, fullNameCases, fullNameMinCases, passw
     readFileSync(new URL("../../data/bva/register.json", import.meta.url), "utf8"),
 );
 
+const validForm = () => ({
+    email: fixed.email,
+    fullName: fixed.fullName,
+    password: makePassword(12),
+});
+
+const replacers = {
+    email: (page, value) => page.replaceEmail(value),
+    fullName: (page, value) => page.replaceFullName(value),
+    password: (page, value) => page.replacePassword(value),
+};
+
+// Kasus enabled: isi form dengan nilai batas, tombol harus berubah false -> true.
+// Kasus disabled: isi form valid dulu (kontrol: tombol harus enabled), lalu ganti field uji ke nilai batas,
+// tombol harus berubah true -> false. Tanpa kontrol ini, tombol yang disabled sejak awal
+// membuat tes lolos tanpa membuktikan apa pun.
+async function expectSubmitState(page, { field, value, expected }) {
+    if (expected) {
+        await page.fillValidForm({ ...validForm(), [field]: value });
+        await page.waitForSubmitEnabled(true);
+        return;
+    }
+    await page.fillValidForm(validForm());
+    await page.waitForSubmitEnabled(true);
+    await replacers[field](page, value);
+    await page.waitForSubmitEnabled(false);
+}
+
 describe("Gramedia - Register Page", () => {
     const ctx = usePage(RegisterPage);
 
@@ -30,13 +58,11 @@ describe("Gramedia - Register Page", () => {
         });
 
         runCases(emailMinCases, async (c) => {
-            const { page } = ctx;
-            await page.fillValidForm({
-                email: "a".repeat(c.length),
-                fullName: fixed.fullName,
-                password: makePassword(12),
+            await expectSubmitState(ctx.page, {
+                field: "email",
+                value: "a".repeat(c.length),
+                expected: c.expectedSubmitEnabled,
             });
-            await page.waitForSubmitEnabled(c.expectedSubmitEnabled);
         });
     });
 
@@ -47,11 +73,7 @@ describe("Gramedia - Register Page", () => {
 
         runCases(emailCases, async (c) => {
             const { page } = ctx;
-            await page.fillValidForm({
-                email: makeEmail(c.length),
-                fullName: fixed.fullName,
-                password: makePassword(12),
-            });
+            await page.fillValidForm({ ...validForm(), email: makeEmail(c.length) });
             expect((await page.emailValue()).length).to.equal(c.expectedLength);
             if (c.expect === "accepted") await page.waitForSubmitEnabled(true);
         });
@@ -63,13 +85,11 @@ describe("Gramedia - Register Page", () => {
         });
 
         runCases(fullNameMinCases, async (c) => {
-            const { page } = ctx;
-            await page.fillValidForm({
-                email: fixed.email,
-                fullName: "a".repeat(c.length),
-                password: makePassword(12),
+            await expectSubmitState(ctx.page, {
+                field: "fullName",
+                value: "a".repeat(c.length),
+                expected: c.expectedSubmitEnabled,
             });
-            await page.waitForSubmitEnabled(c.expectedSubmitEnabled);
         });
     });
 
@@ -80,11 +100,7 @@ describe("Gramedia - Register Page", () => {
 
         runCases(fullNameCases, async (c) => {
             const { page } = ctx;
-            await page.fillValidForm({
-                email: fixed.email,
-                fullName: "a".repeat(c.length),
-                password: makePassword(12),
-            });
+            await page.fillValidForm({ ...validForm(), fullName: "a".repeat(c.length) });
             expect((await page.fullNameValue()).length).to.equal(c.expectedLength);
             if (c.expect === "accepted") await page.waitForSubmitEnabled(true);
         });
@@ -97,13 +113,12 @@ describe("Gramedia - Register Page", () => {
 
         runCases(passwordCases, async (c) => {
             const { page } = ctx;
-            await page.fillValidForm({
-                email: fixed.email,
-                fullName: fixed.fullName,
-                password: makePassword(c.length),
+            await expectSubmitState(page, {
+                field: "password",
+                value: makePassword(c.length),
+                expected: c.expectedSubmitEnabled,
             });
             expect((await page.passwordValue()).length).to.equal(c.length);
-            await page.waitForSubmitEnabled(c.expectedSubmitEnabled);
         });
     });
 });
