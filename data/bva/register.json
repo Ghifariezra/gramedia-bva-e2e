@@ -1,0 +1,142 @@
+{
+    "variable": "register form field length",
+    "fixed": {
+        "email": "bva.tester@example.com",
+        "fullName": "BVA Tester"
+    },
+    "emailMin": 1,
+    "emailMax": 254,
+    "fullNameMin": 1,
+    "fullNameMax": 150,
+    "passwordMin": 8,
+    "emailMinCases": [
+        {
+            "id": "AUTH-BVA-E04",
+            "description": "Empty email (min-1) keeps the Daftar button disabled",
+            "length": 0,
+            "class": "invalid",
+            "expect": "rejected",
+            "expectedSubmitEnabled": false
+        },
+        {
+            "id": "AUTH-BVA-E05",
+            "description": "Email with 1 character (min) enables the Daftar button",
+            "length": 1,
+            "class": "valid",
+            "expect": "accepted",
+            "expectedSubmitEnabled": true
+        },
+        {
+            "id": "AUTH-BVA-E06",
+            "description": "Email with 2 characters (min+1) enables the Daftar button",
+            "length": 2,
+            "class": "valid",
+            "expect": "accepted",
+            "expectedSubmitEnabled": true
+        }
+    ],
+    "emailCases": [
+        {
+            "id": "AUTH-BVA-E01",
+            "description": "Typing 253 characters in email (max-1) keeps all 253 characters and enables the Daftar button",
+            "length": 253,
+            "class": "valid",
+            "expect": "accepted",
+            "expectedLength": 253
+        },
+        {
+            "id": "AUTH-BVA-E02",
+            "description": "Typing 254 characters in email (max) keeps all 254 characters and enables the Daftar button",
+            "length": 254,
+            "class": "valid",
+            "expect": "accepted",
+            "expectedLength": 254
+        },
+        {
+            "id": "AUTH-BVA-E03",
+            "description": "Typing 255 characters in email (max+1) is truncated to 254 characters in the input",
+            "length": 255,
+            "class": "invalid",
+            "expect": "truncated",
+            "expectedLength": 254
+        }
+    ],
+    "fullNameMinCases": [
+        {
+            "id": "AUTH-BVA-N04",
+            "description": "Empty full name (min-1) keeps the Daftar button disabled",
+            "length": 0,
+            "class": "invalid",
+            "expect": "rejected",
+            "expectedSubmitEnabled": false
+        },
+        {
+            "id": "AUTH-BVA-N05",
+            "description": "Full name with 1 character (min) enables the Daftar button",
+            "length": 1,
+            "class": "valid",
+            "expect": "accepted",
+            "expectedSubmitEnabled": true
+        },
+        {
+            "id": "AUTH-BVA-N06",
+            "description": "Full name with 2 characters (min+1) enables the Daftar button",
+            "length": 2,
+            "class": "valid",
+            "expect": "accepted",
+            "expectedSubmitEnabled": true
+        }
+    ],
+    "fullNameCases": [
+        {
+            "id": "AUTH-BVA-N01",
+            "description": "Typing 149 characters in full name (max-1) keeps all 149 characters and enables the Daftar button",
+            "length": 149,
+            "class": "valid",
+            "expect": "accepted",
+            "expectedLength": 149
+        },
+        {
+            "id": "AUTH-BVA-N02",
+            "description": "Typing 150 characters in full name (max) keeps all 150 characters and enables the Daftar button",
+            "length": 150,
+            "class": "valid",
+            "expect": "accepted",
+            "expectedLength": 150
+        },
+        {
+            "id": "AUTH-BVA-N03",
+            "description": "Typing 151 characters in full name (max+1) is truncated to 150 characters in the input",
+            "length": 151,
+            "class": "invalid",
+            "expect": "truncated",
+            "expectedLength": 150
+        }
+    ],
+    "passwordCases": [
+        {
+            "id": "AUTH-BVA-P01",
+            "description": "Password with 7 characters (min-1) keeps the Daftar button disabled",
+            "length": 7,
+            "class": "invalid",
+            "expect": "rejected",
+            "expectedSubmitEnabled": false
+        },
+        {
+            "id": "AUTH-BVA-P02",
+            "description": "Password with 8 characters (min) enables the Daftar button",
+            "length": 8,
+            "class": "valid",
+            "expect": "accepted",
+            "expectedSubmitEnabled": true
+        },
+        {
+            "id": "AUTH-BVA-P03",
+            "description": "Password with 9 characters (min+1) enables the Daftar button",
+            "length": 9,
+            "class": "valid",
+            "expect": "accepted",
+            "expectedSubmitEnabled": true
+        }
+    ]
+}
