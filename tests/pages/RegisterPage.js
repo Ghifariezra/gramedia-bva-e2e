@@ -1,3 +1,5 @@
+import { Key } from "selenium-webdriver";
+import { pause } from "../../utilities/wait.js";
 import { registerLocators } from "../locators/register.locators.js";
 import BasePage from "./BasePage.js";
 
@@ -37,6 +39,43 @@ export default class RegisterPage extends BasePage {
 
     async setConfirmPassword(value) {
         await this.type(this.locators.confirmPasswordInput, value);
+    }
+
+    // Ctrl+A lalu Backspace supaya React menerima event input. element.clear() bisa tidak memicu onChange.
+    async clearField(locator) {
+        await this.withPromoGuard(async () => {
+            const element = await this.find(locator);
+            const selectAll = process.platform === "darwin" ? Key.COMMAND : Key.CONTROL;
+            await element.sendKeys(selectAll, "a");
+            await element.sendKeys(Key.BACK_SPACE);
+        });
+        await this.driver.wait(async () => (await this.getValue(locator)) === "", 5000, "Field was not cleared");
+    }
+
+    // Mengganti isi field yang sudah terisi. Nilai kosong hanya menghapus.
+    async replaceValue(locator, value) {
+        await this.clearField(locator);
+        if (value !== "") {
+            await this.withPromoGuard(async () => {
+                const element = await this.find(locator);
+                await element.sendKeys(String(value));
+            });
+        }
+        await pause(this.driver);
+    }
+
+    async replaceEmail(value) {
+        await this.replaceValue(this.locators.emailInput, value);
+    }
+
+    async replaceFullName(value) {
+        await this.replaceValue(this.locators.fullNameInput, value);
+    }
+
+    // Password dan konfirmasi diganti bersamaan, supaya tombol tidak disabled karena keduanya tidak cocok.
+    async replacePassword(value) {
+        await this.replaceValue(this.locators.passwordInput, value);
+        await this.replaceValue(this.locators.confirmPasswordInput, value);
     }
 
     async checkTerms() {
