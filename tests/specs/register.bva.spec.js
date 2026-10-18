@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { expect } from "chai";
+import addContext from "mochawesome/addContext.js";
 import { makeEmail, makePassword } from "../../utilities/data.js";
 import { usePage } from "../../utilities/fixtures.js";
 import { itOpensAndShowsTitle, runCases } from "../../utilities/shared.js";
@@ -57,12 +58,18 @@ describe("Gramedia - Register Page", () => {
             await ctx.page.openRegisterForm();
         });
 
-        runCases(emailMinCases, async (c) => {
+        runCases(emailMinCases, async function (c) {
             await expectSubmitState(ctx.page, {
                 field: "email",
                 value: "a".repeat(c.length),
                 expected: c.expectedSubmitEnabled,
             });
+            if (c.expectedSubmitEnabled) {
+                addContext(this, {
+                    title: "Defect Candidate",
+                    value: `Email "${"a".repeat(c.length)}" (no @) enables the Daftar button. No client-side email format validation observed. There is no specification, so the test asserts only the button state.`,
+                });
+            }
         });
     });
 

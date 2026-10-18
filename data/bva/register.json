@@ -20,7 +20,7 @@
         },
         {
             "id": "AUTH-BVA-E05",
-            "description": "Email with 1 character (min) enables the Daftar button",
+            "description": "Email with 1 character (min) enables the Daftar button (email format is not validated by the button state)",
             "length": 1,
             "class": "valid",
             "expect": "accepted",
@@ -28,7 +28,7 @@
         },
         {
             "id": "AUTH-BVA-E06",
-            "description": "Email with 2 characters (min+1) enables the Daftar button",
+            "description": "Email with 2 characters (min+1) enables the Daftar button (email format is not validated by the button state)",
             "length": 2,
             "class": "valid",
             "expect": "accepted",
