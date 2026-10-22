@@ -1,5 +1,6 @@
 import { error } from "selenium-webdriver";
 import config from "../../utilities/config.js";
+import { saveScreenshot } from "../../utilities/screenshot.js";
 import { pause, waitForClickable, waitForUrlContains, waitForVisible } from "../../utilities/wait.js";
 import { commonLocators } from "../locators/common.locators.js";
 
@@ -26,10 +27,27 @@ export default class BasePage {
                 if (this.readyLocator) await this.find(this.readyLocator);
                 break;
             } catch (err) {
-                if (!(err instanceof error.TimeoutError) || attempt >= attempts) throw err;
+                if (!(err instanceof error.TimeoutError)) throw err;
+                await this.captureNavigationFailure(url, attempt, err);
+                if (attempt >= attempts) throw err;
             }
         }
         await pause(this.driver);
+    }
+
+    // Diagnostik: catat apa yang sebenarnya tampil di browser saat halaman gagal siap.
+    async captureNavigationFailure(url, attempt, err) {
+        try {
+            const title = await this.driver.getTitle();
+            const current = await this.driver.getCurrentUrl();
+            const reason = String(err.message).split("\n")[0];
+            console.log(`    navigate failed (attempt ${attempt}): ${url} | now=${current} | title="${title}"`);
+            console.log(`    reason: ${reason}`);
+            const file = await saveScreenshot(this.driver, `navigate_failed_${this.constructor.name}_${attempt}`);
+            console.log(`    screenshot: ${file}`);
+        } catch (diagnosticError) {
+            console.log(`    navigate diagnostics failed: ${diagnosticError.message}`);
+        }
     }
 
     async isLoaded() {
