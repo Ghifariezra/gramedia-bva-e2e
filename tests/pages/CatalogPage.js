@@ -5,9 +5,15 @@ import BasePage from "./BasePage.js";
 export default class CatalogPage extends BasePage {
     path = "/";
     locators = catalogLocators;
+    readyLocator = catalogLocators.searchInput;
+
+    // Hanya mengetik, tanpa ENTER. Dipakai untuk kasus yang menguji isi input.
+    async typeSearch(keyword) {
+        await this.type(this.locators.searchInput, keyword);
+    }
 
     async search(keyword) {
-        await this.type(this.locators.searchInput, keyword);
+        await this.typeSearch(keyword);
         const input = await this.find(this.locators.searchInput);
         await input.sendKeys(Key.ENTER);
     }

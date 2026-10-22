@@ -7,12 +7,7 @@ import BasePage from "./BasePage.js";
 export default class StoreCatalogPage extends BasePage {
     path = "/store/gramedia-balikpapan";
     locators = catalogLocators;
-
-    async open() {
-        await this.driver.get(`${config.baseUrl}${this.path}`);
-        await this.find(this.locators.priceFilter);
-        await pause(this.driver);
-    }
+    readyLocator = catalogLocators.priceFilter;
 
     async openWithQuery(params = {}) {
         const query =
@@ -21,10 +16,7 @@ export default class StoreCatalogPage extends BasePage {
                 : typeof params === "string"
                   ? params.replace(/^\?/, "")
                   : new URLSearchParams(params).toString();
-        const url = `${config.baseUrl}${this.path}${query ? `?${query}` : ""}`;
-        await this.driver.get(url);
-        await this.find(this.locators.priceFilter);
-        await pause(this.driver);
+        await this.navigate(`${config.baseUrl}${this.path}${query ? `?${query}` : ""}`);
     }
 
     async clearAndTypeDelimited(locator, text) {
