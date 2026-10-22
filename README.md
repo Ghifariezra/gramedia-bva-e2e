@@ -380,18 +380,15 @@ NO_SANDBOX=false
 
 ```bash
 npm test                  # run everything
-npm run test:parallel     # local parallel run
+npm run test:register     # registration form (AUTH-BVA)
+npm run test:catalog      # catalog search (CAT-BVA-S)
+npm run test:price        # price filter (CAT-BVA-M, X, R)
+npm run test:headless     # run everything headless
+npm run test:parallel     # local parallel run (3 workers), writes reports/index.html
+npm run test:ci           # serial run used by CI, writes reports/index.html
 ```
 
-Run a single suite directly with Mocha:
-
-```bash
-npx mocha tests/specs/catalog.bva.spec.js     # search keyword length
-npx mocha tests/specs/price.bva.spec.js       # price filter
-npx mocha tests/specs/register.bva.spec.js    # registration form
-```
-
-In CI the suite runs serially with a 2 second action delay, because running three browsers in parallel triggers HTTP 429 from the site.
+Add `:report` to a suite script (for example `npm run test:price:report`) to generate a Mochawesome HTML report in `reports/`. CI runs `test:ci` serially with `ACTION_DELAY_MS=2000`, and the Mocha timeout is 150 seconds. Parallel runs trigger HTTP 429 from the site, so they are for local use only.
 
 > Spec files appear as modules are curated and implemented.
 
