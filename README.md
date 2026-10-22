@@ -24,13 +24,17 @@ _Bugs hide at the edges, not in the middle. So we test the edges._
     - [Standard BVA test automation, based on the modules of Gramedia.com](#standard-bva-test-automation-based-on-the-modules-of-gramediacom)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
-  - [Why Boundary Value Analysis?](#why-boundary-value-analysis)
-  - [Standard BVA at a Glance](#standard-bva-at-a-glance)
-  - [Modules Under Test](#modules-under-test)
+  - [Test Plan](#test-plan)
+  - [Test Scope](#test-scope)
+    - [In-scope](#in-scope)
+    - [Out-of-scope](#out-of-scope)
+  - [Modules Under Test (BVA curation pending)](#modules-under-test-bva-curation-pending)
   - [Implemented Test Suites](#implemented-test-suites)
     - [Expected result types](#expected-result-types)
-  - [Boundary Table](#boundary-table)
-  - [Example Test Cases](#example-test-cases)
+  - [Why Boundary Value Analysis?](#why-boundary-value-analysis)
+  - [Standard BVA at a Glance](#standard-bva-at-a-glance)
+  - [Boundary Table (draft)](#boundary-table-draft)
+  - [Example Test Cases (illustrative)](#example-test-cases-illustrative)
   - [How It Works](#how-it-works)
   - [Project Structure](#project-structure)
   - [Architecture Layers](#architecture-layers)
@@ -48,7 +52,113 @@ _Bugs hide at the edges, not in the middle. So we test the edges._
 
 This repository automates **black-box, end-to-end tests** for [Gramedia.com](https://www.gramedia.com/) using **Standard Boundary Value Analysis (Type A)**.
 
-Test targets are taken from the modules identified in our report _Desain Test Strategi, Planning, Test Case dan Skenario Pada Gramedia.com_ (Assignment 04, Group 13, Human Error). Only modules with **bounded inputs** are covered by BVA.
+It implements one part of the group's test strategy, defined in the report _Desain Test Strategi, Planning, Test Case dan Skenario Pada Gramedia.com_ (Assignment 04, Group 13, Human Error). The full Test Plan is in [`docs/TEST_PLAN.md`](docs/TEST_PLAN.md).
+
+## Test Plan
+
+Summary. Full details (strategy, resources, risks, environment) are in [`docs/TEST_PLAN.md`](docs/TEST_PLAN.md).
+
+| Item                | Detail                                                  |
+| ------------------- | ------------------------------------------------------- |
+| Object under test   | Gramedia.com (<https://www.gramedia.com/>), web version |
+| Test type           | Black-box, validation and system level                  |
+| Reference standards | ISO/IEC/IEEE 29119-2 and 29119-3, ISO/IEC 25010         |
+| Approach            | Risk-Based Testing; manual and automated                |
+| Period              | 12 October to 6 November 2026                           |
+| This repository     | Automated Standard BVA                                  |
+
+**Exit criteria**
+
+1. 100% of high-priority test cases executed.
+2. At least 90% of all test cases executed.
+3. No open Critical defect without documentation.
+4. Test report completed.
+
+**Milestones**
+
+| Milestone                   | Target      |
+| --------------------------- | ----------- |
+| M1: Test Plan done          | 16 Oct 2026 |
+| M2: all test cases reviewed | 23 Oct 2026 |
+| M3: execution done          | 3 Nov 2026  |
+| M4: final report submitted  | 6 Nov 2026  |
+
+**Test environment**
+
+| Component   | Specification                                                        |
+| ----------- | -------------------------------------------------------------------- |
+| Application | Gramedia.com, production                                             |
+| Client      | Laptop (Chrome, Firefox, Edge, Safari), Android/iOS smartphone       |
+| Resolution  | Desktop 1920x1080 and 1366x768, tablet 768px, mobile 375px           |
+| Test data   | Dedicated team test account, sample products from several categories |
+
+## Test Scope
+
+### In-scope
+
+| No  | Module                       | Test focus                                                                     |
+| --- | ---------------------------- | ------------------------------------------------------------------------------ |
+| 1   | Product Catalog & Categories | Category view, price, discount, filter, sorting, pagination                    |
+| 2   | Product Detail               | Information completeness, format options, breadcrumb, images                   |
+| 3   | Promo & Campaign             | Promo banners, discount price accuracy, promo page links                       |
+| 4   | Store Locator                | Branch location search and display                                             |
+| 6   | Content / Blog               | Article display and navigation                                                 |
+| 7   | Customer Service             | "Hubungi Kami" form, WhatsApp link                                             |
+| 10  | Account & Authentication     | Registration, login, logout, input validation, password reset                  |
+| 11  | Cart & Checkout              | Add, change, remove items, total calculation, flow up to payment stage         |
+| 12  | Payment & Shipping           | Payment method and courier options, shipping cost calculation (before payment) |
+| –   | Non-functional               | Responsiveness, browser compatibility, performance, basic security             |
+
+### Out-of-scope
+
+| Item                                                 | Reason                                                  |
+| ---------------------------------------------------- | ------------------------------------------------------- |
+| Real payment transactions                            | Incur real cost                                         |
+| Internal payment gateway and courier systems         | Managed by third parties                                |
+| Module 9: Mobile App Channel                         | Group focuses on the web version only                   |
+| Module 5: Affiliate & Partnership                    | Requires an official partnership process                |
+| Module 8: Social Media Integration                   | External platform content, only link opening is checked |
+| Large-scale load/stress and deep penetration testing | Risks disrupting the production site                    |
+| Server, database, source code                        | No access (black-box)                                   |
+
+## Modules Under Test (BVA curation pending)
+
+All in-scope modules are currently BVA **candidates**. Which of them have bounded inputs, and therefore get Standard BVA test cases, will be decided in a separate curation step.
+
+| No  | Module                       | BVA applicability |
+| --- | ---------------------------- | ----------------- |
+| 1   | Product Catalog & Categories | Pending curation  |
+| 2   | Product Detail               | Pending curation  |
+| 3   | Promo & Campaign             | Pending curation  |
+| 4   | Store Locator                | Pending curation  |
+| 6   | Content / Blog               | Pending curation  |
+| 7   | Customer Service             | Pending curation  |
+| 10  | Account & Authentication     | Pending curation  |
+| 11  | Cart & Checkout              | Pending curation  |
+| 12  | Payment & Shipping           | Pending curation  |
+
+## Implemented Test Suites
+
+> Snapshot of the test code written so far. It does not finalize module curation: the table above stays the source of truth for which modules are BVA-applicable.
+
+| Spec file              | Module          | Variable under test               | Case IDs                                                | Cases |
+| ---------------------- | --------------- | --------------------------------- | ------------------------------------------------------- | ----- |
+| `catalog.bva.spec.js`  | Product Catalog | Search keyword length             | `CAT-BVA-S01` to `S06`                                  | 6     |
+| `price.bva.spec.js`    | Product Catalog | Min price, max price, range order | `CAT-BVA-M01` to `M07`, `X01` to `X07`, `R01` to `R03`  | 17    |
+| `register.bva.spec.js` | Account & Auth  | Email, full name, password length | `AUTH-BVA-E01` to `E06`, `N01` to `N06`, `P01` to `P03` | 15    |
+
+Total: **38 BVA cases**. `register.bva.spec.js` also contains non-BVA checks: the page opens and reaches the form, `AUTH-PRE-01` (terms checkbox precondition), and `AUTH-RULE-01` (password min-length indicator).
+
+Case ID suffixes: `S` search, `M` min price, `X` max price, `R` range ordering, `E` email, `N` full name, `P` password.
+
+### Expected result types
+
+| `expect`    | Meaning                                                                |
+| ----------- | ---------------------------------------------------------------------- |
+| `accepted`  | Input is kept and the feature proceeds (button enabled, results open)  |
+| `rejected`  | Input is refused (button stays disabled, toast shown, URL not changed) |
+| `truncated` | The input field cuts the value at the max length                       |
+| `ignored`   | Keystrokes beyond the limit are dropped by the field                   |
 
 ## Why Boundary Value Analysis?
 
@@ -86,57 +196,38 @@ For every bounded input with range `[min, max]`, each boundary gets **three crit
 
 > **Out of scope:** Robustness BVA (Type B), which feeds extreme values far beyond the requirement to test error-handling resilience.
 
-## Modules Under Test
+## Boundary Table (draft)
 
-| No  | Module                       | Bounded variables                                   | ID prefix  | Status      |
-| --- | ---------------------------- | --------------------------------------------------- | ---------- | ----------- |
-| 10  | Account & Authentication     | Email length, full name length, password length     | `AUTH-BVA` | Implemented |
-| 1   | Product Catalog & Categories | Search keyword length, price filter (min, max)      | `CAT-BVA`  | Implemented |
-| 11  | Cart & Checkout              | Item quantity (min 1, max = stock)                  | `CART-BVA` | Planned     |
-| 7   | Customer Service             | Message field length in "Hubungi Kami" form         | `CS-BVA`   | Planned     |
+> Draft. Variables and values are finalized after module curation. Values are filled in from direct observation of the live site, not guessed.
 
-Modules 2, 3, 4, and 6 have no bounded inputs and are covered by non-BVA smoke tests. Modules 5, 8, 9 and real payment transactions are **out of scope** (see Test Scope in the report).
-
-## Implemented Test Suites
-
-| Spec file               | Module          | Variable under test                | Case IDs                                                 | Cases |
-| ----------------------- | --------------- | ---------------------------------- | -------------------------------------------------------- | ----- |
-| `catalog.bva.spec.js`   | Product Catalog | Search keyword length              | `CAT-BVA-S01` to `S06`                                   | 6     |
-| `price.bva.spec.js`     | Product Catalog | Min price, max price, range order  | `CAT-BVA-M01` to `M07`, `X01` to `X07`, `R01` to `R03`   | 17    |
-| `register.bva.spec.js`  | Account & Auth  | Email, full name, password length  | `AUTH-BVA-E01` to `E06`, `N01` to `N06`, `P01` to `P03`  | 15    |
-
-Total: **38 BVA cases**. `register.bva.spec.js` also contains non-BVA checks: the page opens and reaches the form, `AUTH-PRE-01` (terms checkbox precondition), and `AUTH-RULE-01` (password min-length indicator).
-
-Case ID suffixes: `S` search, `M` min price, `X` max price, `R` range ordering, `E` email, `N` full name, `P` password.
-
-### Expected result types
-
-| `expect`    | Meaning                                                                 |
-| ----------- | ----------------------------------------------------------------------- |
-| `accepted`  | Input is kept and the feature proceeds (button enabled, results open)   |
-| `rejected`  | Input is refused (button stays disabled, toast shown, URL not changed)  |
-| `truncated` | The input field cuts the value at the max length                        |
-| `ignored`   | Keystrokes beyond the limit are dropped by the field                    |
-
-## Boundary Table
-
-Values are filled in from direct observation of the live site, not guessed.
-
-| Variable                      | Min | Max                | Behavior at max+1                    | Source            |
-| ----------------------------- | --- | ------------------ | ------------------------------------ | ----------------- |
-| Search keyword length         | 3   | 50                 | Truncated to 50 characters           | Navbar search     |
-| Price filter (min and max)    | 1   | 10,000,000,000,000 | Extra keystroke ignored              | Catalog filter    |
-| Email length                  | 1   | 254                | Truncated to 254 characters          | Registration form |
-| Full name length              | 1   | 150                | Truncated to 150 characters          | Registration form |
-| Password length               | 8   | TBD                | Max not observed yet                 | Registration form |
-| Item quantity                 | 1   | TBD (stock)        | Not tested yet                       | Cart page         |
-| "Hubungi Kami" message length | TBD | TBD                | Not tested yet                       | Contact form      |
+| Variable                      | Min | Max                | Behavior at max+1           | Source            |
+| ----------------------------- | --- | ------------------ | --------------------------- | ----------------- |
+| Search keyword length         | 3   | 50                 | Truncated to 50 characters  | Navbar search     |
+| Price filter (min and max)    | 1   | 10,000,000,000,000 | Extra keystroke ignored     | Catalog filter    |
+| Email length                  | 1   | 254                | Truncated to 254 characters | Registration form |
+| Full name length              | 1   | 150                | Truncated to 150 characters | Registration form |
+| Password length               | 8   | TBD                | Max not observed yet        | Registration form |
+| Item quantity                 | 1   | TBD (stock)        | Not tested yet              | Cart page         |
+| "Hubungi Kami" message length | TBD | TBD                | Not tested yet              | Contact form      |
 
 Searching with fewer than 3 characters shows a "minimum 3 karakter" toast and does not navigate.
 
-## Example Test Cases
+## Example Test Cases (illustrative)
 
-Catalog search keyword with `min = 3` and `max = 50` (`data/bva/catalog.json`):
+Illustrative example only, not a curated module. Cart quantity with `min = 1` and `max = stock` (shown as `S`):
+
+| ID          | Input | Class           | Expected result                    |
+| ----------- | ----- | --------------- | ---------------------------------- |
+| CART-BVA-01 | `0`   | Invalid (min-1) | Rejected / cannot decrease below 1 |
+| CART-BVA-02 | `1`   | Valid (min)     | Accepted                           |
+| CART-BVA-03 | `2`   | Valid (min+1)   | Accepted                           |
+| CART-BVA-04 | `S-1` | Valid (max-1)   | Accepted                           |
+| CART-BVA-05 | `S`   | Valid (max)     | Accepted                           |
+| CART-BVA-06 | `S+1` | Invalid (max+1) | Rejected / stock message shown     |
+
+ID format: `<MODULE>-BVA-<suffix><number>`. Each case records the variable, input, class (valid/invalid), expected result, and actual result.
+
+Example from the implemented data: catalog search keyword with `min = 3` and `max = 50` (`data/bva/catalog.json`):
 
 | ID          | Input length | Class           | Expected result                                  |
 | ----------- | ------------ | --------------- | ------------------------------------------------ |
@@ -146,8 +237,6 @@ Catalog search keyword with `min = 3` and `max = 50` (`data/bva/catalog.json`):
 | CAT-BVA-S04 | `49`         | Valid (max-1)   | Accepted                                         |
 | CAT-BVA-S05 | `50`         | Valid (max)     | Accepted                                         |
 | CAT-BVA-S06 | `51`         | Invalid (max+1) | Truncated to 50 characters in the input          |
-
-ID format: `<MODULE>-BVA-<suffix><number>`. Each case records the variable, input, class (valid/invalid), expected result, and actual result.
 
 ## How It Works
 
@@ -199,6 +288,8 @@ gramedia-bva-e2e/
 │       ├── catalog.json         # search keyword length
 │       ├── price.json           # min price, max price, range order
 │       └── register.json        # email, full name, password length
+├── docs/
+│   └── TEST_PLAN.md             # full Test Plan from the Tugas 04 report
 ├── tests/
 │   ├── locators/
 │   │   ├── catalog.locators.js
@@ -273,34 +364,33 @@ CHROMEDRIVER_PATH=
 NO_SANDBOX=false
 ```
 
-| Variable               | Default                    | Purpose                                                  |
-| ---------------------- | -------------------------- | -------------------------------------------------------- |
-| `BASE_URL`             | `https://www.gramedia.com` | Site under test                                          |
-| `BROWSER`              | `chrome`                   | Only Chrome is supported                                 |
-| `HEADLESS`             | auto                       | Forced on when no display is available (for example CI)  |
-| `ACTION_DELAY_MS`      | `1000`                     | Pause after each action to stay under rate limits        |
-| `EXPLICIT_WAIT_MS`     | `15000`                    | Default explicit wait                                    |
-| `PAGE_LOAD_TIMEOUT_MS` | `30000`                    | Page load timeout                                        |
-| `CHROME_BIN`           | empty                      | Custom Chrome binary, must exist if set                  |
-| `CHROMEDRIVER_PATH`    | empty                      | Custom chromedriver, must exist if set                   |
-| `NO_SANDBOX`           | `false`                    | Adds `--no-sandbox` for containers and CI                |
+| Variable               | Default                    | Purpose                                                 |
+| ---------------------- | -------------------------- | ------------------------------------------------------- |
+| `BASE_URL`             | `https://www.gramedia.com` | Site under test                                         |
+| `BROWSER`              | `chrome`                   | Only Chrome is supported                                |
+| `HEADLESS`             | auto                       | Forced on when no display is available (for example CI) |
+| `ACTION_DELAY_MS`      | `1000`                     | Pause after each action to stay under rate limits       |
+| `EXPLICIT_WAIT_MS`     | `15000`                    | Default explicit wait                                   |
+| `PAGE_LOAD_TIMEOUT_MS` | `30000`                    | Page load timeout                                       |
+| `CHROME_BIN`           | empty                      | Custom Chrome binary, must exist if set                 |
+| `CHROMEDRIVER_PATH`    | empty                      | Custom chromedriver, must exist if set                  |
+| `NO_SANDBOX`           | `false`                    | Adds `--no-sandbox` for containers and CI               |
 
 ## Running the Tests
 
 ```bash
 npm test                  # run everything
-npm run test:parallel     # local parallel run
+npm run test:register     # registration form (AUTH-BVA)
+npm run test:catalog      # catalog search (CAT-BVA-S)
+npm run test:price        # price filter (CAT-BVA-M, X, R)
+npm run test:headless     # run everything headless
+npm run test:parallel     # local parallel run (3 workers), writes reports/index.html
+npm run test:ci           # serial run used by CI, writes reports/index.html
 ```
 
-Run a single suite directly with Mocha:
+Add `:report` to a suite script (for example `npm run test:price:report`) to generate a Mochawesome HTML report in `reports/`. CI runs `test:ci` serially with `ACTION_DELAY_MS=2000`, and the Mocha timeout is 150 seconds. Parallel runs trigger HTTP 429 from the site, so they are for local use only.
 
-```bash
-npx mocha tests/specs/catalog.bva.spec.js     # search keyword length
-npx mocha tests/specs/price.bva.spec.js       # price filter
-npx mocha tests/specs/register.bva.spec.js    # registration form
-```
-
-In CI the suite runs serially with a 2 second action delay, because running three browsers in parallel triggers HTTP 429 from the site.
+> Spec files appear as modules are curated and implemented.
 
 ## Test Design Notes
 
@@ -333,21 +423,25 @@ Tests run against the **production site**, so:
 
 ## Limitations
 
-- The site UI can change at any time, which may break selectors.
-- Captcha or anti-bot protection may block automation.
-- The site rate-limits by IP (HTTP 429), so results on shared CI runners can be flaky.
-- The payment flow cannot be tested end to end.
-- Cart & Checkout and Customer Service suites are not implemented yet.
+Mapped to the risks in the Test Plan:
+
+- **R4:** the site UI can change during testing, which may break selectors
+- **R5:** captcha or rate limiting can block automation, so actions use delays. The site rate-limits by IP (HTTP 429), so results on shared CI runners can be flaky (see [Test Design Notes](#test-design-notes))
+- **R6:** the payment flow cannot be tested end to end
+- **R7:** the site may be slow or down during promotions, so runs may need repeating
+- **R8:** results may differ across browsers and devices
+
+Test suites currently exist only for Product Catalog (search, price filter) and Account & Authentication (registration form). Other modules wait for curation.
 
 ## Team
 
 **Group 13: Human Error**
 
-| Name                  | Student ID | Role              |
-| --------------------- | ---------- | ----------------- |
-| Rakha Hafidz Fauzan   | 4524210082 | Test Manager      |
-| Muhammad Hilmi        | 4524210066 | QA Engineer       |
-| Ghifari Ezra Ramadhan | 4524210041 | Automation Tester |
+| Name                  | Student ID | Role                                        |
+| --------------------- | ---------- | ------------------------------------------- |
+| Rakha Hafidz Fauzan   | 4524210082 | Test Manager                                |
+| Muhammad Hilmi        | 4524210066 | QA Engineer                                 |
+| Ghifari Ezra Ramadhan | 4524210041 | Automation Tester, Security Auditor (basic) |
 
 Supervising lecturer: Dra. Sri Rezeki Candra N, M.Kom.
 
