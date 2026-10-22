@@ -7,13 +7,28 @@ export default class BasePage {
     // Di-override oleh subclass.
     path = "/";
     locators = {};
+    // Elemen penanda halaman sudah render. null = tidak menunggu apa pun.
+    readyLocator = null;
 
     constructor(driver) {
         this.driver = driver;
     }
 
     async open() {
-        await this.driver.get(`${config.baseUrl}${this.path}`);
+        await this.navigate(`${config.baseUrl}${this.path}`);
+    }
+
+    // Buka URL dan tunggu readyLocator. Kalau timeout (render telat), ulangi navigasi.
+    async navigate(url, attempts = 2) {
+        for (let attempt = 1; ; attempt++) {
+            try {
+                await this.driver.get(url);
+                if (this.readyLocator) await this.find(this.readyLocator);
+                break;
+            } catch (err) {
+                if (!(err instanceof error.TimeoutError) || attempt >= attempts) throw err;
+            }
+        }
         await pause(this.driver);
     }
 

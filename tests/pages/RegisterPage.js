@@ -6,6 +6,7 @@ import BasePage from "./BasePage.js";
 export default class RegisterPage extends BasePage {
     path = "/";
     locators = registerLocators;
+    readyLocator = registerLocators.goToRegister;
 
     async goToRegister() {
         await this.click(this.locators.goToRegister);

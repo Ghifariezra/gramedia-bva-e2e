@@ -1,20 +1,39 @@
-import { until } from "selenium-webdriver";
+import { error, until } from "selenium-webdriver";
 import config from "./config.js";
 
 const resolveTimeout = (ms) => ms ?? config.timeouts.explicit;
 
-export async function waitForVisible(driver, locator, ms) {
-    const element = await driver.wait(
-        until.elementLocated(locator),
+const isTransient = (err) => err instanceof error.NoSuchElementError || err instanceof error.StaleElementReferenceError;
+
+// Cari ulang elemen di setiap polling, jadi elemen yang diganti oleh re-render tidak membuat tes gagal.
+async function waitForElement(driver, locator, ms, check, description) {
+    return driver.wait(
+        async () => {
+            try {
+                const element = await driver.findElement(locator);
+                return (await check(element)) ? element : false;
+            } catch (err) {
+                if (isTransient(err)) return false;
+                throw err;
+            }
+        },
         resolveTimeout(ms),
-        `Element not located: ${locator}`,
+        `Element not ${description}: ${locator}`,
     );
-    return driver.wait(until.elementIsVisible(element), resolveTimeout(ms), `Element not visible: ${locator}`);
 }
 
-export async function waitForClickable(driver, locator, ms) {
-    const element = await waitForVisible(driver, locator, ms);
-    return driver.wait(until.elementIsEnabled(element), resolveTimeout(ms), `Element not enabled: ${locator}`);
+export function waitForVisible(driver, locator, ms) {
+    return waitForElement(driver, locator, ms, (element) => element.isDisplayed(), "visible");
+}
+
+export function waitForClickable(driver, locator, ms) {
+    return waitForElement(
+        driver,
+        locator,
+        ms,
+        async (element) => (await element.isDisplayed()) && (await element.isEnabled()),
+        "clickable",
+    );
 }
 
 export async function waitForUrlContains(driver, fragment, ms) {
