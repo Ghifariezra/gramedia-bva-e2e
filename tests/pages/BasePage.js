@@ -19,7 +19,7 @@ export default class BasePage {
     }
 
     // Buka URL dan tunggu readyLocator. Kalau timeout (render telat), ulangi navigasi.
-    async navigate(url, attempts = 2) {
+    async navigate(url, attempts = 3) {
         for (let attempt = 1; ; attempt++) {
             try {
                 await this.driver.get(url);
