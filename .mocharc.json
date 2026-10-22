@@ -1,7 +1,5 @@
 {
-    "require": [
-        "utilities/hooks.js"
-    ],
+    "require": ["utilities/hooks.js"],
     "timeout": 90000,
     "reporter": "spec"
 }
