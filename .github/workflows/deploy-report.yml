@@ -53,13 +53,15 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
-            - name: Run E2E tests (parallel) + generate report
+            # Serial + jeda 2 detik: gramedia.com membalas 429 kalau runner menghantam situs paralel.
+            - name: Run E2E tests (serial) + generate report
               id: e2e
               continue-on-error: true
               env:
                   NO_SANDBOX: "true"
                   CI: "true"
-              run: npm run test:parallel
+                  ACTION_DELAY_MS: "2000"
+              run: npm run test:ci
 
             - name: Upload screenshots
               if: always()
