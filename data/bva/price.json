@@ -1,0 +1,191 @@
+{
+    "variable": "price filter",
+    "min": 1,
+    "max": 10000000000000,
+    "fixedPriceN": 100000,
+    "minCases": [
+        {
+            "id": "CAT-BVA-M01",
+            "description": "Typing 0 (min-1) is rejected, input stays empty, no min_price in URL",
+            "value": 0,
+            "channel": "type",
+            "class": "invalid",
+            "expect": "rejected",
+            "expectedInput": "",
+            "expectedParam": null
+        },
+        {
+            "id": "CAT-BVA-M02",
+            "description": "Typing 1 (min) is accepted, input shows 1, URL has min_price=1",
+            "value": 1,
+            "channel": "type",
+            "class": "valid",
+            "expect": "accepted",
+            "expectedInput": "1",
+            "expectedParam": "1"
+        },
+        {
+            "id": "CAT-BVA-M03",
+            "description": "Typing 2 (min+1) is accepted, input shows 2, URL has min_price=2",
+            "value": 2,
+            "channel": "type",
+            "class": "valid",
+            "expect": "accepted",
+            "expectedInput": "2",
+            "expectedParam": "2"
+        },
+        {
+            "id": "CAT-BVA-M04",
+            "description": "Typing 9999999999999 (max-1) is accepted, input shows 9.999.999.999.999, URL has min_price=9999999999999",
+            "value": 9999999999999,
+            "channel": "type",
+            "class": "valid",
+            "expect": "accepted",
+            "expectedInput": "9999999999999",
+            "expectedParam": "9999999999999"
+        },
+        {
+            "id": "CAT-BVA-M05",
+            "description": "Typing 10000000000000 (max) is accepted, input shows 10.000.000.000.000, URL has min_price=10000000000000",
+            "value": 10000000000000,
+            "channel": "type",
+            "class": "valid",
+            "expect": "accepted",
+            "expectedInput": "10000000000000",
+            "expectedParam": "10000000000000"
+        },
+        {
+            "id": "CAT-BVA-M06",
+            "description": "Typing 10000000000001 (max+1) ignores exceeding keystroke, input shows 1.000.000.000.000, URL has min_price=1000000000000",
+            "value": 10000000000001,
+            "channel": "type",
+            "class": "invalid",
+            "expect": "ignored",
+            "expectedInput": "1000000000000",
+            "expectedParam": "1000000000000"
+        },
+        {
+            "id": "CAT-BVA-M07",
+            "description": "Opening URL with min_price=10000000000001 (max+1) leaves the input empty",
+            "value": 10000000000001,
+            "channel": "url",
+            "class": "invalid",
+            "expect": "rejected",
+            "expectedInput": "",
+            "expectedParam": "10000000000001"
+        }
+    ],
+    "maxCases": [
+        {
+            "id": "CAT-BVA-X01",
+            "description": "Typing 0 (min-1) is rejected, input stays empty, no max_price in URL",
+            "value": 0,
+            "channel": "type",
+            "class": "invalid",
+            "expect": "rejected",
+            "expectedInput": "",
+            "expectedParam": null
+        },
+        {
+            "id": "CAT-BVA-X02",
+            "description": "Typing 1 (min) is accepted, input shows 1, URL has max_price=1",
+            "value": 1,
+            "channel": "type",
+            "class": "valid",
+            "expect": "accepted",
+            "expectedInput": "1",
+            "expectedParam": "1"
+        },
+        {
+            "id": "CAT-BVA-X03",
+            "description": "Typing 2 (min+1) is accepted, input shows 2, URL has max_price=2",
+            "value": 2,
+            "channel": "type",
+            "class": "valid",
+            "expect": "accepted",
+            "expectedInput": "2",
+            "expectedParam": "2"
+        },
+        {
+            "id": "CAT-BVA-X04",
+            "description": "Typing 9999999999999 (max-1) is accepted, input shows 9.999.999.999.999, URL has max_price=9999999999999",
+            "value": 9999999999999,
+            "channel": "type",
+            "class": "valid",
+            "expect": "accepted",
+            "expectedInput": "9999999999999",
+            "expectedParam": "9999999999999"
+        },
+        {
+            "id": "CAT-BVA-X05",
+            "description": "Typing 10000000000000 (max) is accepted, input shows 10.000.000.000.000, URL has max_price=10000000000000",
+            "value": 10000000000000,
+            "channel": "type",
+            "class": "valid",
+            "expect": "accepted",
+            "expectedInput": "10000000000000",
+            "expectedParam": "10000000000000"
+        },
+        {
+            "id": "CAT-BVA-X06",
+            "description": "Typing 10000000000001 (max+1) ignores exceeding keystroke, input shows 1.000.000.000.000, URL has max_price=1000000000000",
+            "value": 10000000000001,
+            "channel": "type",
+            "class": "invalid",
+            "expect": "ignored",
+            "expectedInput": "1000000000000",
+            "expectedParam": "1000000000000"
+        },
+        {
+            "id": "CAT-BVA-X07",
+            "description": "Opening URL with max_price=10000000000001 (max+1) drops parameter from URL and leaves input empty",
+            "value": 10000000000001,
+            "channel": "url",
+            "class": "invalid",
+            "expect": "rejected",
+            "expectedInput": "",
+            "expectedParam": null
+        }
+    ],
+    "rangeCases": [
+        {
+            "id": "CAT-BVA-R01",
+            "description": "Range ordering min=N-1 (99999), max=N (100000): both parameters applied to URL and inputs show values",
+            "min": 99999,
+            "max": 100000,
+            "channel": "type",
+            "class": "valid",
+            "expect": "accepted",
+            "expectedMinInput": "99999",
+            "expectedMaxInput": "100000",
+            "expectedMinParam": "99999",
+            "expectedMaxParam": "100000"
+        },
+        {
+            "id": "CAT-BVA-R02",
+            "description": "Range ordering min=N (100000), max=N (100000): both parameters applied to URL and inputs show values",
+            "min": 100000,
+            "max": 100000,
+            "channel": "type",
+            "class": "valid",
+            "expect": "accepted",
+            "expectedMinInput": "100000",
+            "expectedMaxInput": "100000",
+            "expectedMinParam": "100000",
+            "expectedMaxParam": "100000"
+        },
+        {
+            "id": "CAT-BVA-R03",
+            "description": "Range ordering min=N+1 (100001), max=N (100000): both parameters applied to URL and inputs show values (0 products found)",
+            "min": 100001,
+            "max": 100000,
+            "channel": "type",
+            "class": "invalid",
+            "expect": "accepted",
+            "expectedMinInput": "100001",
+            "expectedMaxInput": "100000",
+            "expectedMinParam": "100001",
+            "expectedMaxParam": "100000"
+        }
+    ]
+}

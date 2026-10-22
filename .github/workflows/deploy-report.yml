@@ -1,0 +1,100 @@
+name: E2E Test & Deploy Report
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+concurrency:
+    group: pages
+    cancel-in-progress: true
+
+jobs:
+    # Lint berjalan terpisah: kalau merah, run ditandai gagal tapi report tetap dibuat dan di-deploy.
+    lint:
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Lint (Biome)
+              run: npx biome ci .
+
+    test:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        outputs:
+            test_outcome: ${{ steps.e2e.outcome }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm ci
+
+            # Serial + jeda 2 detik: gramedia.com membalas 429 kalau runner menghantam situs paralel.
+            - name: Run E2E tests (serial) + generate report
+              id: e2e
+              continue-on-error: true
+              env:
+                  NO_SANDBOX: "true"
+                  CI: "true"
+                  ACTION_DELAY_MS: "2000"
+              run: npm run test:ci
+
+            - name: Upload screenshots
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: screenshots
+                  path: screenshots
+                  if-no-files-found: ignore
+
+            - name: Ensure report exists
+              run: test -f reports/index.html
+
+            - name: Setup Pages
+              uses: actions/configure-pages@v5
+
+            - name: Upload report as Pages artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: reports
+
+    deploy:
+        needs: test
+        runs-on: ubuntu-latest
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
+
+            - name: Fail job if tests failed
+              if: needs.test.outputs.test_outcome == 'failure'
+              run: |
+                  echo "Test gagal. Report tetap di-deploy, tapi job ditandai failed."
+                  exit 1

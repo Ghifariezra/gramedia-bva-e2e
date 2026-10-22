@@ -6,3 +6,6 @@ screenshots/
 commit-message.txt
 reports/
 screenshots/
+scripts/
+codebase-dump.txt
+ci-screenshots/

@@ -19,6 +19,13 @@ describe("Gramedia - Catalog search length (BVA)", () => {
     runCases(cases, async (c) => {
         const { page } = ctx;
         const keyword = makeKeyword(c.length);
+
+        if (c.expect === "truncated") {
+            await page.typeSearch(keyword);
+            expect((await page.searchInputValue()).length).to.equal(50);
+            return;
+        }
+
         await page.search(keyword);
 
         if (c.expect === "rejected") {
@@ -27,8 +34,6 @@ describe("Gramedia - Catalog search length (BVA)", () => {
         } else if (c.expect === "accepted") {
             await page.waitForUrl(`/search?q=${keyword}`);
             expect(await page.currentUrl()).to.include(`q=${keyword}`);
-        } else if (c.expect === "truncated") {
-            expect((await page.searchInputValue()).length).to.equal(50);
         }
     });
 });
