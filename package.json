@@ -26,6 +26,8 @@
         "test:parallel": "cross-env HEADLESS=true mocha \"tests/specs/**/*.spec.js\" --parallel --jobs 3 --require mochawesome/register --reporter mochawesome --reporter-options reportDir=reports,reportFilename=index,html=true,json=false,overwrite=true,timestamp=false,inline=true",
         "test:ci": "cross-env HEADLESS=true mocha \"tests/specs/**/*.spec.js\" --reporter mochawesome --reporter-options reportDir=reports,reportFilename=index,html=true,json=false,overwrite=true,timestamp=false,inline=true",
         "test:report": "mocha \"tests/specs/**/*.spec.js\" --reporter mochawesome --reporter-options reportDir=reports,reportFilename=bva-report,overwrite=false,timestamp=true,inline=true",
+        "test:tdd": "mocha \"tests/specs/**/*.spec.js\" --reporter mochawesome --reporter-options reportDir=reports/tdd,reportFilename=tdd-result,html=false,json=true,overwrite=true,timestamp=false",
+        "report:tdd": "node scripts/generate-tdd-report.js",
         "check": "biome check .",
         "check:fix": "biome check --write .",
         "verify": "biome ci . && npm test"
@@ -35,6 +37,8 @@
         "chai": "^6.3.0",
         "cross-env": "^10.1.0",
         "dotenv": "^18.0.8",
+        "exceljs": "^4.4.0",
+        "jszip": "^3.10.2",
         "mocha": "^12.0.3",
         "mochawesome": "^8.1.1",
         "selenium-webdriver": "^4.51.0"

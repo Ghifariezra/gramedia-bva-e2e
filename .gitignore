@@ -6,6 +6,7 @@ screenshots/
 commit-message.txt
 reports/
 screenshots/
-scripts/
+scripts/*
+!scripts/generate-tdd-report.js
 codebase-dump.txt
 ci-screenshots/
